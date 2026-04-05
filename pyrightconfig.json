@@ -1,4 +1,6 @@
 {
     "extraPaths": ["src", "demo", "evaluation", "data_format"],
+    "venvPath": ".",
+    "venv": ".venv",
     "typeCheckingMode": "off"
 }
