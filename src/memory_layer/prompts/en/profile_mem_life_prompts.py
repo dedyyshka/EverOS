@@ -34,6 +34,7 @@ Analyze conversations and output a list of operations (can have multiple). Avail
 3. sources format: use conversation ID (in brackets, e.g., ep1, ep2)
 4. evidence should include time info - e.g., "In Oct 2024 user mentioned..."
 5. Index numbers for explicit_info and implicit_traits are independent
+6. Write all descriptive fields (description, evidence, trait, category, update_note) in the same language as the conversation
 
 【Profile Definitions & Analysis Framework】
 - **explicit_info (Explicit Information)**: User facts that can be directly extracted from conversations.
@@ -76,6 +77,7 @@ Compaction strategies:
 2. **Refine Tags**: Implicit traits should be summarized as personality tags (e.g., [Risk-Averse]), removing repetitive or shallow descriptions.
 3. Delete unimportant, outdated, or short-term statuses.
 4. Preserve item fields (especially evidence / sources).
+5. Write all descriptive fields and compact_note in the same language as the existing profile content.
 
 Current Profile:
 {profile_text}
@@ -108,6 +110,7 @@ Psychological profile, personality tags, and decision styles inferred from behav
 2. Implicit traits must be supported by multiple evidence: each implicit trait must have at least 2 sources; evidence can come from the current conversations and/or the existing profile's evidence/sources (when updating), not from a single new conversation alone
 3. Describe each piece of information in one natural sentence, easy to understand
 4. Mark the source (message ID)
+5. Write all descriptive fields (description, evidence, trait, basis, category) in the same language as the conversation
 
 【Output Format】
 Output JSON directly in the following format:

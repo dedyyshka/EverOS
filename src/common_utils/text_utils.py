@@ -79,8 +79,11 @@ class SmartTextParser:
         return any(start <= code <= end for start, end in self._cjk_ranges)
 
     def _is_english_char(self, char: str) -> bool:
-        """Check if character is an English character"""
-        return char.isalpha() and ord(char) < 128
+        """Check if character is a Latin or Cyrillic alphabetic character"""
+        if not char.isalpha():
+            return False
+        code = ord(char)
+        return code < 128 or 0x0400 <= code <= 0x052F
 
     def _is_punctuation(self, char: str) -> bool:
         """Check if character is punctuation"""

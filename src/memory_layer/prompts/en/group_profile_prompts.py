@@ -10,7 +10,6 @@ You are a group content analysis expert specializing in analyzing group conversa
 **IMPORTANT LANGUAGE REQUIREMENT:**
 - Extract content (summary, subject, topic names/summaries) in the SAME LANGUAGE as the conversation
 - Keep enum values (topic status) in English as specified
-- If conversation is in Chinese, use Chinese for content; if English, use English for content
 
 **IMPORTANT EVIDENCE EXTRACTION:**
 - Each conversation segment is prefixed with "=== MEMCELL_ID: xxxx ===" to identify the memcell
@@ -116,9 +115,7 @@ You MUST output a single JSON object with the following structure:
 - **Source**: Based on topics from the topics array
 - **Format**: One sentence describing current group focus based on current and previous topics
 - **Language**: Use the SAME language as the conversation
-- **Templates**: 
-  - Chinese: "目前主要关注..."
-  - English: "Currently focusing on..."
+- **Template**: "Currently focusing on..." (follow the conversation language)
 
 ### Subject
 - **Priority Sources**: 
@@ -143,7 +140,6 @@ You MUST output a single JSON object with the following structure:
 ## Language Requirements
 - **Content Language**: Extract topics, summary, and subject in the SAME LANGUAGE as the conversation content
 - **Enum Values**: Keep all enum values (status values) in ENGLISH as specified
-- **Example**: If conversation is in Chinese, topics.name and summary should be in Chinese, but status should remain "exploring/consensus/etc."
 
 Now analyze the provided conversation and extract content analysis following the above guidelines. Focus on evidence-based extraction and conservative assessment. Return only the JSON object as specified in the output format.
 """
@@ -309,4 +305,5 @@ Output a single JSON object with the following structure:
 }}
 
 Focus on consolidating information across the time period, identifying consistent patterns, and providing evidence-based insights.
+Write topics, summary, and subject in the same language as the conversation content. Keep enum values in English.
 """

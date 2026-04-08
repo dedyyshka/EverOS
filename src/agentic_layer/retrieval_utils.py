@@ -52,12 +52,39 @@ def _safe_cosine_similarity(
         return None
 
 
+def _detect_language(text: str) -> str:
+    """Detect dominant language of text: 'zh', 'ru', or 'en'"""
+    if re.search(r'[\u4e00-\u9fff]', text):
+        return "zh"
+    if re.search(r'[\u0400-\u04ff]', text):
+        return "ru"
+    return "en"
+
+
+def _tokenize_text(text: str, lang: str, stemmers: dict, stop_words_map: dict) -> list:
+    """Tokenize and process text based on detected language"""
+    from nltk.tokenize import word_tokenize
+
+    if lang == "zh":
+        tokens = list(jieba.cut(text))
+        return filter_chinese_stopwords(tokens)
+
+    tokens = word_tokenize(text.lower())
+    stemmer = stemmers.get(lang, stemmers["en"])
+    stop_words = stop_words_map.get(lang, stop_words_map["en"])
+    return [
+        stemmer.stem(token)
+        for token in tokens
+        if token.isalpha() and len(token) >= 2 and token not in stop_words
+    ]
+
+
 def build_bm25_index(candidates):
-    """Build BM25 index (supports Chinese and English)"""
+    """Build BM25 index (supports Chinese, English, and Russian)"""
     try:
         import nltk
         from nltk.corpus import stopwords
-        from nltk.stem import PorterStemmer
+        from nltk.stem import PorterStemmer, SnowballStemmer
         from nltk.tokenize import word_tokenize
         from rank_bm25 import BM25Okapi
     except ImportError as e:
@@ -79,36 +106,31 @@ def build_bm25_index(candidates):
     except LookupError:
         nltk.download("stopwords", quiet=True)
 
-    stemmer = PorterStemmer()
-    stop_words = set(stopwords.words("english"))
+    stemmers = {
+        "en": PorterStemmer(),
+        "ru": SnowballStemmer("russian"),
+    }
+    stop_words_map = {
+        "en": set(stopwords.words("english")),
+        "ru": set(stopwords.words("russian")),
+    }
 
-    # Extract text and tokenize (supports Chinese and English)
+    # Extract text and tokenize (supports Chinese, English, and Russian)
     tokenized_docs = []
     for mem in candidates:
         text = getattr(mem, "episode", None) or getattr(mem, "summary", "") or ""
-        has_chinese = bool(re.search(r'[\u4e00-\u9fff]', text))
-
-        if has_chinese:
-            tokens = list(jieba.cut(text))
-            processed_tokens = filter_chinese_stopwords(tokens)
-        else:
-            tokens = word_tokenize(text.lower())
-            processed_tokens = [
-                stemmer.stem(token)
-                for token in tokens
-                if token.isalpha() and len(token) >= 2 and token not in stop_words
-            ]
-
+        lang = _detect_language(text)
+        processed_tokens = _tokenize_text(text, lang, stemmers, stop_words_map)
         tokenized_docs.append(processed_tokens)
 
     bm25 = BM25Okapi(tokenized_docs)
-    return bm25, tokenized_docs, stemmer, stop_words
+    return bm25, tokenized_docs, stemmers, stop_words_map
 
 
 async def search_with_bm25(
-    query: str, bm25, candidates, stemmer, stop_words, top_k: int = 50
+    query: str, bm25, candidates, stemmers, stop_words_map, top_k: int = 50
 ) -> List[Tuple]:
-    """BM25 retrieval (supports Chinese and English)"""
+    """BM25 retrieval (supports Chinese, English, and Russian)"""
     if bm25 is None:
         return []
 
@@ -117,19 +139,9 @@ async def search_with_bm25(
     except ImportError:
         return []
 
-    # Tokenize query (supports Chinese and English)
-    has_chinese = bool(re.search(r'[\u4e00-\u9fff]', query))
-
-    if has_chinese:
-        tokens = list(jieba.cut(query))
-        tokenized_query = filter_chinese_stopwords(tokens)
-    else:
-        tokens = word_tokenize(query.lower())
-        tokenized_query = [
-            stemmer.stem(token)
-            for token in tokens
-            if token.isalpha() and len(token) >= 2 and token not in stop_words
-        ]
+    # Tokenize query (supports Chinese, English, and Russian)
+    lang = _detect_language(query)
+    tokenized_query = _tokenize_text(query, lang, stemmers, stop_words_map)
 
     if not tokenized_query:
         return []
@@ -196,7 +208,7 @@ async def lightweight_retrieval(
         return [], metadata
 
     # Build BM25 index
-    bm25, tokenized_docs, stemmer, stop_words = build_bm25_index(candidates)
+    bm25, tokenized_docs, stemmers, stop_words_map = build_bm25_index(candidates)
 
     # Embedding retrieval
     emb_results = []
@@ -226,7 +238,7 @@ async def lightweight_retrieval(
     bm25_results = []
     if bm25 is not None:
         bm25_results = await search_with_bm25(
-            query, bm25, candidates, stemmer, stop_words, top_k=bm25_top_n
+            query, bm25, candidates, stemmers, stop_words_map, top_k=bm25_top_n
         )
 
     metadata["bm25_count"] = len(bm25_results)

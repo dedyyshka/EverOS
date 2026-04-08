@@ -19,7 +19,8 @@ You are an advanced personal foresight analysis agent. Your task is to predict t
 7. **Prefer user_name**: Prefer using user_name when provided; otherwise use user_id (e.g., user_1). Avoid using generic terms like "the user."
 8. **Semantic Grounding**: Predictions must remain semantically related to the input; store grounded supporting facts in evidence so the system can trace back the source.
 ## Output Format:
-Return results as a JSON array, each association includes time information and evidence:
+Return results as a JSON array, each association includes time information and evidence.
+Write "content" and "evidence" fields in the same language as the conversation.
 [
   {{
     "content": "XiaoMing will avoid hot/spicy food for the next week",
@@ -31,7 +32,7 @@ Return results as a JSON array, each association includes time information and e
   ...
 ]
 
-## Example Input (Life Scenario):
+## Example Input (Life Scenario, adapt the output language to match the conversation language):
 - user_id: xiaoming-001
 - user_name: XiaoMing
 - conversation:
@@ -74,7 +75,7 @@ Return results as a JSON array, each association includes time information and e
   ...
 ]
 
-## Example Input (Work Scenario):
+## Example Input (Work Scenario, adapt the output language to match the conversation language):
 - user_id: LiHua-001
 - user_name: LiHua
 - conversation:

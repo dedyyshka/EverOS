@@ -75,6 +75,7 @@ Output Requirements:
 - Evidence format: prefer "[conversation_id:EVENT_ID]" or raw "EVENT_ID" that appears in the conversation memcells.
 - Include only observed dimensions; omit unknown or unsupported ones.
 - The fields must align with the existing schema used by the system.
+- Write output_reasoning and all descriptive values in the same language as the conversation. Keep dimension names and enum values in English.
 
 JSON Template:
 ```json

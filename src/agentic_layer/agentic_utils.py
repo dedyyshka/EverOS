@@ -31,8 +31,8 @@ Please determine whether these memories are sufficient to answer the user's quer
 Output format (JSON):
 {{
     "is_sufficient": true/false,
-    "reasoning": "Your reasoning for the judgment",
-    "missing_information": ["Missing information 1", "Missing information 2"]
+    "reasoning": "Your reasoning for the judgment (follow the query language)",
+    "missing_information": ["Missing information 1 (follow the query language)", "Missing information 2"]
 }}
 
 Requirements:
@@ -40,6 +40,7 @@ Requirements:
 2. If key information is missing, judge as insufficient (false), and list the missing information
 3. reasoning should be concise and clear
 4. missing_information should only be filled when insufficient, otherwise empty array
+5. Write reasoning and missing_information in the same language as the user query
 """
 
 
@@ -63,17 +64,18 @@ Please generate 2-3 complementary queries to help find the missing information. 
 Output format (JSON):
 {{
     "queries": [
-        "Improved query 1",
+        "Improved query 1 (follow the original query language)",
         "Improved query 2",
         "Improved query 3"
     ],
-    "reasoning": "Explanation of query generation strategy"
+    "reasoning": "Explanation of query generation strategy (follow the original query language)"
 }}
 
 Requirements:
 1. queries array contains 2-3 queries
 2. Each query length between 5-200 characters
 3. reasoning explains the generation strategy
+4. Write queries and reasoning in the same language as the original query
 """
 
 

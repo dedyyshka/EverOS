@@ -51,7 +51,7 @@ Return **only** one valid JSON object, with the following exact structure:
 * Resolve pronouns (he/she/it) to specific names where possible.
 
 #### 4. Expression Format
-* Write each atomic_fact as a **single, complete English sentence** in **third-person** form.
+* Write each atomic_fact as a **single, complete sentence** in **third-person** form, following the conversation language.
 * Do **not** simplify, paraphrase, or merge logically distinct ideas.
 
 #### 5. Retrieval Clarity & Filtering

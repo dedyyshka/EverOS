@@ -5,6 +5,7 @@ Follow these principles when generating episodic memories:
 3. Use declarative language to describe episodes, not dialogue format
 4. Highlight key information and emotional changes
 5. Ensure episode content is easy to retrieve later
+6. Write the episode in the same language as the conversation
 """
 
 EPISODE_GENERATION_PROMPT = """
@@ -26,8 +27,8 @@ IMPORTANT TIME HANDLING:
 
 Please generate a structured episodic memory and return only a JSON object containing the following two fields:
 {{
-    "title": "A concise, descriptive title that accurately summarizes the theme (10-20 words)",
-    "content": "A concise factual record of the conversation in third-person narrative. It must include all important information: who participated at what time, what was discussed, what decisions were made, what emotions were expressed, and what plans or outcomes were formed. Write it as a chronological account focusing on observable actions and direct statements. Remove redundant expressions and verbose descriptions while preserving all facts, entities (names, dates, locations), and specific details. Keep the content concise without losing key information. Use the provided conversation start time as the base time for this episode."
+    "title": "A concise, descriptive title that accurately summarizes the theme (10-20 words, follow the conversation language)",
+    "content": "A concise factual record of the conversation in third-person narrative (follow the conversation language). It must include all important information: who participated at what time, what was discussed, what decisions were made, what emotions were expressed, and what plans or outcomes were formed. Write it as a chronological account focusing on observable actions and direct statements. Remove redundant expressions and verbose descriptions while preserving all facts, entities (names, dates, locations), and specific details. Keep the content concise without losing key information. Use the provided conversation start time as the base time for this episode."
 }}
 
 Requirements:
@@ -62,7 +63,7 @@ Requirements:
    - Document repetition counts (e.g., "asked about the project status twice")
 
 
-Example:
+Example (adapt the output language to match the conversation language):
 If the conversation start time is "March 14, 2024 (Thursday) at 3:00 PM UTC" and the conversation is about Caroline planning to go hiking:
 {{
     "title": "Caroline's Mount Rainier Hiking Plan March 14, 2024: Weekend Adventure Planning Session",
@@ -91,8 +92,8 @@ IMPORTANT TIME HANDLING:
 
 Please generate a structured episodic memory and return only a JSON object containing the following two fields:
 {{
-    "title": "A concise, descriptive title that accurately summarizes the theme (10-20 words)",
-    "content": "A concise factual record of the conversation in third-person narrative. It must include all important information: who participated at what time, what was discussed, what decisions were made, what emotions were expressed, and what plans or outcomes were formed. Write it as a chronological account focusing on observable actions and direct statements. Remove redundant expressions and verbose descriptions while preserving all facts, entities (names, dates, locations), and specific details. Keep the content concise without losing key information. Use the provided conversation start time as the base time for this episode."
+    "title": "A concise, descriptive title that accurately summarizes the theme (10-20 words, follow the conversation language)",
+    "content": "A concise factual record of the conversation in third-person narrative (follow the conversation language). It must include all important information: who participated at what time, what was discussed, what decisions were made, what emotions were expressed, and what plans or outcomes were formed. Write it as a chronological account focusing on observable actions and direct statements. Remove redundant expressions and verbose descriptions while preserving all facts, entities (names, dates, locations), and specific details. Keep the content concise without losing key information. Use the provided conversation start time as the base time for this episode."
 }}
 
 Requirements:
@@ -127,7 +128,7 @@ Requirements:
    - Document repetition counts (e.g., "asked about the project status twice")
 
 
-Example:
+Example (adapt the output language to match the conversation language):
 If the conversation start time is "March 14, 2024 (Thursday) at 3:00 PM UTC" and the conversation is about Caroline planning to go hiking:
 {{
     "title": "Caroline's Mount Rainier Hiking Plan March 14, 2024: Weekend Adventure Planning Session",

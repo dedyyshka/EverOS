@@ -179,6 +179,5 @@ For attributes like `user_goal`, `working_habit_preference`, `interests`, `perso
 <output_language>
 - **Content Language**: Extract user_goal, hard_skills, working_habit_preference, interests, user_objective, contributions, subtasks in the **SAME LANGUAGE** as the original content
 - **Enum Values**: Keep all enum values (soft_skills, personality, way_of_decision_making) in ENGLISH as specified
-- **Example**: If original content is in Chinese, user_goal, subtasks should be in Chinese, but personality should remain "Extraversion/NeedForBelonging/etc.".
 </output_language>
 """

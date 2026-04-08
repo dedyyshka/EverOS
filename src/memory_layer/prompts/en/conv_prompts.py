@@ -53,10 +53,10 @@ Decision Principles:
 
 Please return your judgment in JSON format:
 {{
-    "reasoning": "One sentence summary of your reasoning process",
+    "reasoning": "One sentence summary of your reasoning process (follow the conversation language)",
     "should_end": true/false,
     "confidence": 0.0-1.0,
-    "topic_summary": "If should_end = true, summarize the core meaningful topic of the current episode, otherwise leave it blank"
+    "topic_summary": "If should_end = true, summarize the core meaningful topic of the current episode (follow the conversation language), otherwise leave it blank"
 }}
 
 Note:
@@ -67,4 +67,5 @@ Note:
 
 CONV_SUMMARY_PROMPT = """
 You are an episodic memory summary expert. You need to summarize the following conversation.
+Write the summary in the same language as the conversation.
 """
